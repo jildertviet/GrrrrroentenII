@@ -125,4 +125,6 @@ class ofApp : public ofBaseApp{
     
     void saveCuePoints();
     void readCuePoints();
+    void switchCamera(int id, int brightness=255);
+//    void setZoomLevel(int id=-1);
 };

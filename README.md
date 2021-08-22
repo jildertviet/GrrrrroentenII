@@ -16,7 +16,8 @@ Turn WiFi off, since it may mess with the IP's
 :tv: (re-)Runs on the Raspberry Pi connected to the TV. Options: select cam (as argument @ startup), play movie.
 ### groentenGui  
 :computer: Control app to run on MacBook. Select the camera's and control the movements.  
-- To save a cuePoint (for an individual camera) or scene (for all cameras): hold shift and press the button. 
+- To save a cuePoint (for an individual camera) or scene (for all cameras): hold shift and press the button.  
+- In a scene the (0,1) pan/tilt positions, (2) zoom and (3) active camera are saved. 
 ### groentenPreview  
 :computer: Shows an overview of all the streams, run at MacBook.  
 ### groentenServer  
@@ -51,3 +52,4 @@ oscServer.py runs the pan/tilt HAT
 Server is @ 192.168.0.11  
 Camera's are in range [2-6]  
 Netmask: 255.255.255.0  
+MacBook is 192.168.0.10 (or anything besides, 2, 3, 4, 5, 6 and 11).  

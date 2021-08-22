@@ -179,12 +179,7 @@ void ofApp::onMatrixEvent(ofxDatGuiMatrixEvent e){
     if(e.target->is("Cam preview")){
         selectCam(e.child);
     } else if(e.target->is("Cam select")){
-        ofxOscMessage m;
-        m.setAddress("/selectCam");
-        m.addIntArg(e.child); // 0 - 4
-        camSelector.sendMessage(m);
-        gui->getSlider("camFade")->setValue(0);
-        cout << "Select cam" << endl;
+        switchCamera(e.child, 0);
     } else if(e.target->is("playVideo")){
         ofxOscMessage m;
         m.setAddress("/playMovie");
@@ -206,10 +201,72 @@ void ofApp::onMatrixEvent(ofxDatGuiMatrixEvent e){
             camDatas[selectedCam].goToCuePoint(e.child);
         }
     } else if(e.target->is("scenes")){
+        string fileName = "";
+        fileName += ofToString(e.child);
+        fileName += ".preset";
         if(bShiftPressed){
+            cout << "Create file " << fileName << endl;
             // Save current state
+            ofFile f(ofToDataPath(fileName), ofFile::WriteOnly);
+            f.create();
+            f.clear();
+            ofBuffer b;
+            for(int i=0; i<NUM_CAMS; i++){
+                b.append(ofToString(camDatas[i].destination.x) + ";");
+                b.append(ofToString(camDatas[i].destination.y) + ";");
+                b.append(ofToString(camDatas[i].zoomlevel) + ";");
+                b.append(ofToString((int)gui->getMatrix("Cam select")->getSelected()[0]) + "\n");
+            }
+            f.writeFromBuffer(b);
+            f.close();
         } else{
             // Execute current scene
+            ofFile f(ofToDataPath(fileName));
+            ofBuffer b = f.readToBuffer();
+            vector<string> lines = ofSplitString(b.getText(), "\n");
+            for(int i=0; i<lines.size(); i++){
+                if(lines[i].length() == 0)
+                    continue;
+                vector<string> arguments = ofSplitString(lines[i], ";");
+                if(arguments.size()){
+                    camDatas[i].destination.x = ofToFloat(arguments[0]);
+                    camDatas[i].destination.y = ofToFloat(arguments[1]);
+                    camDatas[i].zoomlevel = ofToFloat(arguments[2]);
+                    
+                    if(i==0){
+                        // Execute once (for master)
+                        gui->getMatrix("Cam select")->setSelected(vector<int>{ofToInt(arguments[3])});
+                        switchCamera(ofToInt(arguments[3]), 255); // Full brightness = 255
+                    }
+                    
+                    ofxOscMessage m; // Duplicated :/ should be in function?
+                    m.setAddress("/setZoomLevel");
+                    // Calculate a zoom level
+                    float level = camDatas[selectedCam].zoomlevel;
+                    float w, h, x, y;
+                    w = 1280;
+                    h = 720;
+                    x = (level/20.) * w * 0.5 * 0.6;
+                    y = (level/20.) * h * 0.5 * 0.6;
+                    w = w - (2*x);
+                    w /= 1280.;
+                    h = h - (2*y);
+                    h /= 720.;
+                    x /= 1280.;
+                    y /= 720.; // Scale 0-1
+                    
+                    cout << x << " " << y << " " << w << " " << h << endl;
+                    m.addFloatArg(x);
+                    m.addFloatArg(y);
+                    m.addFloatArg(w);
+                    m.addFloatArg(h);
+                    camDatas[selectedCam].appSender.sendMessage(m);
+                }
+            }
+            cout << "Preset:" << endl;
+            cout << b.getText() << endl;
+            cout << "End of preset:" << endl;
+            f.close();
         }
     }
 }
@@ -330,7 +387,7 @@ void ofApp::update(){
     for(char i=0; i<NUM_CAMS; i++){
         camDatas[i].update();
     }
-    
+    gui->getSlider("Zoom level")->setValue(camDatas[selectedCam].zoomlevel);
     gui->get2dPad("Pan / tilt")->actualLoc = camDatas[selectedCam].pos;
 }
 
@@ -481,4 +538,13 @@ void ofApp::readCuePoints(){
 //            gui->getMatrix("cuePoint")->getButtonAtIndex(index);
         }
     }
+}
+
+void ofApp::switchCamera(int id, int brightness){
+    ofxOscMessage m;
+    m.setAddress("/selectCam");
+    m.addIntArg(id); // 0 - 4
+    camSelector.sendMessage(m);
+    gui->getSlider("camFade")->setValue(brightness);
+    cout << "Select cam" << endl;
 }
