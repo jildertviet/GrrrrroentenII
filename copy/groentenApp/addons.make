@@ -1,4 +1,0 @@
-ofxGPIO
-ofxGui
-ofxOMXCamera
-ofxOsc
