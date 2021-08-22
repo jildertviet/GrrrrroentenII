@@ -5,6 +5,7 @@ void ofApp::setup(){
     ofSetFrameRate(1);
     ofBackground(0);
     ofSetFullscreen(true);
+    ofHideCursor();
 }
 
 void ofApp::draw(){

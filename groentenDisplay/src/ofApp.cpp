@@ -1,6 +1,7 @@
 #include "ofApp.h"
 
 void ofApp::setup(){
+    ofHideCursor();
     ofSetFrameRate(30);
     player = new ofxOMXPlayer();
 
