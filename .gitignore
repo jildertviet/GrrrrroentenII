@@ -5,6 +5,6 @@ example-direct-mode-transform/
 *.xcconfig
 **/config.make
 
-bin/**
+*.app
 !/bin/data/
 *.DS_Store
