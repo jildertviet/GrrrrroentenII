@@ -17,13 +17,13 @@ Turn WiFi off, since it may mess with the IP's
 ### groentenGui  
 :computer: Control app to run on MacBook. Select the camera's and control the movements.  
 - To save a cuePoint (for an individual camera) or scene (for all cameras): hold shift and press the button.  
-- In a scene the (0,1) pan/tilt positions, (2) zoom and (3) active camera are saved. 
+- In a scene the (0,1) pan/tilt positions, (2) zoom and (3) active camera are saved.
 ### groentenPreview  
 :computer: Shows an overview of all the streams, run at MacBook.  
 ### groentenServer  
 :tv: Runs at the TV-Raspberry. Receives messages to restart groentenDisplay with selected camera.  
 
-Had to do the restart thing, since switching between stream introduced lag.
+Had to do the restart thing, since switching between stream introduced increasing/permanent lag in the stream.
 
 ## Hardware  
 6x Raspberry Pi Model 3B+ 1GB  

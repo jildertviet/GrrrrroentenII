@@ -236,7 +236,8 @@ void ofApp::onMatrixEvent(ofxDatGuiMatrixEvent e){
                     if(i==0){
                         // Execute once (for master)
                         gui->getMatrix("Cam select")->setSelected(vector<int>{ofToInt(arguments[3])});
-                        switchCamera(ofToInt(arguments[3]), 255); // Full brightness = 255
+                        switchCamera(ofToInt(arguments[3]), 0); 
+                        camFader.trigger(40, 0); // 50 is delayTime, compensates for switch time
                     }
                     
                     ofxOscMessage m; // Duplicated :/ should be in function?
@@ -376,6 +377,11 @@ void ofApp::update(){
         } else if(state == 2){
             gui->getMatrix("Cam preview")->getButtonAtIndex(i)->setOnline(false);
         }
+    }
+    
+    if(camFader.bDone == false){
+        camFader.update();
+        gui->getSlider("camFade")->setValue(camFader.value); // Also sends OSC?
     }
     
     gui->update();

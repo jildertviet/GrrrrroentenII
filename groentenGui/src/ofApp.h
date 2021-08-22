@@ -9,6 +9,35 @@
 #define NUM_CUES    5
 #define NUM_SCENES  32
 
+class CamFader{
+public:
+    CamFader(){
+        value = 0;
+    }
+    void update(){
+        if(bDone){
+            return;
+        }
+        if(delayTime > 0){
+            delayTime -= 1;
+            return;
+        }
+        if(value < 255){
+            value += 2;
+        } else{
+            bDone = true;
+        }
+    }
+    void trigger(int delay=30, int v=0){
+        bDone = false;
+        delayTime = delay;
+        value = v;
+    }
+    bool bDone = false;
+    float delayTime = 0;
+    float value = 0;
+};
+
 class camData{
 public:
     ofImage preview;
@@ -126,5 +155,7 @@ class ofApp : public ofBaseApp{
     void saveCuePoints();
     void readCuePoints();
     void switchCamera(int id, int brightness=255);
+    
+    CamFader camFader;
 //    void setZoomLevel(int id=-1);
 };
