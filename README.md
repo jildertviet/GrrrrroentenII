@@ -2,7 +2,7 @@
 Software for Raspberry Pi based camera system for Grrrrroenten II  
 Made and tested with of_v0.10.0_osx_release  
 
-![GrrrrroentenGui](https://github.com/jildertviet/GrrrrroentenII/blob/main/groentenGui/bin/data/grrrrroentenGui.png)
+![GrrrrroentenGui](https://github.com/jildertviet/GrrrrroentenII/blob/main/groentenGui/bin/data/grrrrroentenGui.png | width=100)
 
 ## Apps  
 ### groentenApp  
