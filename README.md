@@ -1,6 +1,7 @@
 # GrrrrroentenII
 Software for Raspberry Pi based camera system for Grrrrroenten II  
 Made and tested with of_v0.10.0_osx_release  
+Turn WiFi off, since it may mess with the IP's  
 
 ![GrrrrroentenGui](https://github.com/jildertviet/GrrrrroentenII/blob/main/groentenGui/bin/data/grrrrroentenGui.png)
 
@@ -10,13 +11,15 @@ Made and tested with of_v0.10.0_osx_release
 ### groentenBlack  
 :tv: Very simple app to guarantee a black view on the TV  
 ### groentenDisplay  
-:tv: Runs on the Raspberry Pi connected to the TV. Options: select cam, play movie.
+:tv: (re-)Runs on the Raspberry Pi connected to the TV. Options: select cam (as argument @ startup), play movie.
 ### groentenGui  
 :computer: Control app to run on MacBook. Select the camera's and control the movements.
 ### groentenPreview  
 :computer: Shows an overview of all the streams, run at MacBook.  
 ### groentenServer  
-:movie_camera: ... ?
+:tv: Runs at the TV-Raspberry. Receives messages to restart groentenDisplay with selected camera.  
+
+Had to do the restart thing, since switching between stream introduced lag.
 
 ## Hardware  
 6x Raspberry Pi Model 3B+ 1GB  
@@ -45,5 +48,3 @@ oscServer.py runs the pan/tilt HAT
 Server is @ 192.168.0.11  
 Camera's are in range [2-6]  
 Netmask: 255.255.255.0  
-
-xx
