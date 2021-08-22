@@ -1,0 +1,10 @@
+copy/
+example-direct-mode-transform/
+*.xcodeproj
+*.plist
+*.xcconfig
+**/config.make
+
+bin/
+!data/
+*.DS_Store
