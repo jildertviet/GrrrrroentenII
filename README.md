@@ -6,17 +6,17 @@ Made and tested with of_v0.10.0_osx_release
 
 ## Apps  
 ### groentenApp  
-Seems deprecated? Probably used before switchting to python IP stream.
+:x: Seems deprecated? Probably used before switchting to python IP stream.
 ### groentenBlack  
-Very simple app to guarantee a black view on the TV  
+:tv: Very simple app to guarantee a black view on the TV  
 ### groentenDisplay  
-Runs on the Raspberry Pi connected to the TV. Options: select cam, play movie.
+:tv: Runs on the Raspberry Pi connected to the TV. Options: select cam, play movie.
 ### groentenGui  
-Control app to run on MacBook. Select the camera's and control the movements.
+:computer: Control app to run on MacBook. Select the camera's and control the movements.
 ### groentenPreview  
-Shows an overview of all the streams, run at MacBook.  
+:computer: Shows an overview of all the streams, run at MacBook.  
 ### groentenServer  
-...
+:movie_camera: ... ?
 
 ## Hardware  
 6x Raspberry Pi Model 3B+ 1GB  
