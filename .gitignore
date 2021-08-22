@@ -6,5 +6,5 @@ example-direct-mode-transform/
 **/config.make
 
 bin/
-!data/
+!bin/data/
 *.DS_Store
