@@ -68,6 +68,9 @@ void ofApp::setup(){
     
     gui->addMatrix("cuePoint", NUM_CUES, true);
     gui->getMatrix("cuePoint")->setRadioMode(true);
+    
+    gui->addMatrix("scenes", NUM_SCENES, true);
+    gui->getMatrix("scenes")->setRadioMode(true);
 
     gui->on2dPadEvent(this, &ofApp::on2dPadEvent);
     gui->onMatrixEvent(this, &ofApp::onMatrixEvent);
@@ -146,7 +149,8 @@ void ofApp::onButtonEvent(ofxDatGuiButtonEvent e){
         m.setAddress("/playMovie");
         camDatas[selectedCam].appSender.sendMessage(m);
     } else if(e.target->is("Open preview-app")){
-        system("/Users/jildertviet/of_v0.10.0_osx_release/apps/groenten/groentenPreview/bin/groentenPreviewDebug.app/Contents/MacOS/groentenPreviewDebug &");
+        // Make this relative to the path where this app runs...
+        system("/Users/jildertviet/of_v0.11.0_osx_release/apps/myApps/GrrrrroentenII/groentenPreview/bin/groentenPreviewDebug.app/Contents/MacOS/groentenPreviewDebug &");
     } else if(e.target->is("SSH")){
         string cmd = "/usr/bin/osascript -e 'tell application \"Terminal\" to do script \"ssh pi@";
         cmd += camDatas[selectedCam].ip;
@@ -200,6 +204,12 @@ void ofApp::onMatrixEvent(ofxDatGuiMatrixEvent e){
             }
         } else{
             camDatas[selectedCam].goToCuePoint(e.child);
+        }
+    } else if(e.target->is("scenes")){
+        if(bShiftPressed){
+            // Save current state
+        } else{
+            // Execute current scene
         }
     }
 }

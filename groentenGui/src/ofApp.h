@@ -7,6 +7,7 @@
 
 #define NUM_CAMS    5
 #define NUM_CUES    5
+#define NUM_SCENES  32
 
 class camData{
 public:

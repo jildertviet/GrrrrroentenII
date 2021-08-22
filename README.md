@@ -1,6 +1,8 @@
 # GrrrrroentenII
 Software for Raspberry Pi based camera system for Grrrrroenten II  
 Made and tested with of_v0.10.0_osx_release  
+ofxDatGui is customized  
+groentenGui also builds on of_v0.11.0
 Turn WiFi off, since it may mess with the IP's  
 
 ![GrrrrroentenGui](https://github.com/jildertviet/GrrrrroentenII/blob/main/groentenGui/bin/data/grrrrroentenGui.png)
@@ -13,7 +15,8 @@ Turn WiFi off, since it may mess with the IP's
 ### groentenDisplay  
 :tv: (re-)Runs on the Raspberry Pi connected to the TV. Options: select cam (as argument @ startup), play movie.
 ### groentenGui  
-:computer: Control app to run on MacBook. Select the camera's and control the movements.
+:computer: Control app to run on MacBook. Select the camera's and control the movements.  
+- To save a cuePoint (for an individual camera) or scene (for all cameras): hold shift and press the button. 
 ### groentenPreview  
 :computer: Shows an overview of all the streams, run at MacBook.  
 ### groentenServer  
