@@ -1,4 +1,4 @@
 # Ignore everything in here apart from the .gitignore file
 *
-!streams.xml
+!streams.json
 !.gitignore
