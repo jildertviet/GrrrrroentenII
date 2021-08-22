@@ -2,6 +2,8 @@
 Software for Raspberry Pi based camera system for Grrrrroenten II  
 Made and tested with of_v0.10.0_osx_release  
 
+![GrrrrroentenGui](https://github.com/jildertviet/GrrrrroentenII/blob/main/groentenGui/bin/data/grrrrroentenGui.png)
+
 ## Apps  
 ### groentenApp  
 Seems deprecated? Probably used before switchting to python IP stream.
