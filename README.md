@@ -44,4 +44,4 @@ Server is @ 192.168.0.11
 Camera's are in range [2-6]  
 Netmask: 255.255.255.0  
 
-x
+xx
