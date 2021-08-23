@@ -1,2 +1,3 @@
 ofxDatGui
+ofxMidi
 ofxOsc

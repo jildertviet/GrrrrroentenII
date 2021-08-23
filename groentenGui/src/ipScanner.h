@@ -17,6 +17,7 @@ public:
     };
     ~ipScanner(){
         ipStatusChannel.close();
+        stopThread();
         waitForThread(true);
     };
     bool bStop = false;

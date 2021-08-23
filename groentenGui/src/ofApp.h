@@ -4,6 +4,8 @@
 #include "ofxDatGui.h"
 #include "ipScanner.h"
 #include "ofxOsc.h"
+#include "ofxMidi.h"
+
 
 #define NUM_CAMS    5
 #define NUM_CUES    5
@@ -120,7 +122,7 @@ public:
     }
 };
 
-class ofApp : public ofBaseApp{
+class ofApp : public ofBaseApp, public ofxMidiListener {
 
 	public:
         void setup();
@@ -129,6 +131,12 @@ class ofApp : public ofBaseApp{
         void exit();
     
         ofxDatGui* gui;
+    
+        void newMidiMessage(ofxMidiMessage& eventArgs);
+        
+        ofxMidiIn midiIn;
+        ofxMidiOut midiOut;
+        void initMidi();
 
         void keyPressed(int key);
         void keyReleased(int key);
@@ -158,4 +166,5 @@ class ofApp : public ofBaseApp{
     
     CamFader camFader;
 //    void setZoomLevel(int id=-1);
+    int switchScene(int id);
 };

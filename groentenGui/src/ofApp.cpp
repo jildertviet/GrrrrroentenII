@@ -4,7 +4,7 @@ void ofApp::setup(){
     ofSetFrameRate(30);
     ofSetWindowShape(ofGetScreenWidth() / 4, ofGetScreenHeight() / 2);
     ofSetWindowTitle("Grrrrroenten II cams");
-    
+    initMidi();
     vector<string> ips = {
         "192.168.0.2",
         "192.168.0.3",
@@ -93,6 +93,7 @@ void ofApp::setup(){
 
 void ofApp::exit(){
     ip.bStop = true;
+//    ip.stopThread();
 }
 
 void ofApp::onToggleEvent(ofxDatGuiToggleEvent e){
@@ -220,54 +221,7 @@ void ofApp::onMatrixEvent(ofxDatGuiMatrixEvent e){
             f.writeFromBuffer(b);
             f.close();
         } else{
-            // Execute current scene
-            ofFile f(ofToDataPath(fileName));
-            ofBuffer b = f.readToBuffer();
-            vector<string> lines = ofSplitString(b.getText(), "\n");
-            for(int i=0; i<lines.size(); i++){
-                if(lines[i].length() == 0)
-                    continue;
-                vector<string> arguments = ofSplitString(lines[i], ";");
-                if(arguments.size()){
-                    camDatas[i].destination.x = ofToFloat(arguments[0]);
-                    camDatas[i].destination.y = ofToFloat(arguments[1]);
-                    camDatas[i].zoomlevel = ofToFloat(arguments[2]);
-                    
-                    if(i==0){
-                        // Execute once (for master)
-                        gui->getMatrix("Cam select")->setSelected(vector<int>{ofToInt(arguments[3])});
-                        switchCamera(ofToInt(arguments[3]), 0); 
-                        camFader.trigger(40, 0); // 50 is delayTime, compensates for switch time
-                    }
-                    
-                    ofxOscMessage m; // Duplicated :/ should be in function?
-                    m.setAddress("/setZoomLevel");
-                    // Calculate a zoom level
-                    float level = camDatas[selectedCam].zoomlevel;
-                    float w, h, x, y;
-                    w = 1280;
-                    h = 720;
-                    x = (level/20.) * w * 0.5 * 0.6;
-                    y = (level/20.) * h * 0.5 * 0.6;
-                    w = w - (2*x);
-                    w /= 1280.;
-                    h = h - (2*y);
-                    h /= 720.;
-                    x /= 1280.;
-                    y /= 720.; // Scale 0-1
-                    
-                    cout << x << " " << y << " " << w << " " << h << endl;
-                    m.addFloatArg(x);
-                    m.addFloatArg(y);
-                    m.addFloatArg(w);
-                    m.addFloatArg(h);
-                    camDatas[selectedCam].appSender.sendMessage(m);
-                }
-            }
-            cout << "Preset:" << endl;
-            cout << b.getText() << endl;
-            cout << "End of preset:" << endl;
-            f.close();
+            switchScene(e.child);
         }
     }
 }
@@ -553,4 +507,85 @@ void ofApp::switchCamera(int id, int brightness){
     camSelector.sendMessage(m);
     gui->getSlider("camFade")->setValue(brightness);
     cout << "Select cam" << endl;
+}
+
+void ofApp::initMidi(){
+    midiIn.listInPorts();
+    midiIn.openPort("APC MINI");
+    //midiIn.openPort("IAC Pure Data In");    // by name
+    //midiIn.openVirtualPort("ofxMidiIn Input"); // open a virtual port
+    
+    // don't ignore sysex, timing, & active sense messages,
+//    midiIn.ignoreTypes(false, false, false);
+    // add ofApp as a listener
+    midiIn.addListener(this);
+    // print received messages to the console
+    midiIn.setVerbose(true);
+    
+    midiOut.openPort("APC MINI");
+    //midiOut.openPort("IAC Driver Pure Data In"); // by name
+    //midiOut.openVirtualPort("ofxMidiOut"); // open a virtual port
+}
+
+void ofApp::newMidiMessage(ofxMidiMessage& msg) {
+    for(int i=0; i<64; i++){
+        midiOut.sendNoteOn(msg.channel, i,  0);
+    }
+    midiOut.sendNoteOn(msg.channel, msg.pitch,  1);
+    if(msg.pitch>=7){
+        int sceneID = msg.pitch - 8;
+        switchScene(sceneID);
+        gui->getMatrix("Scenes")->setSelected(vector<int>{sceneID});
+    }
+}
+
+int ofApp::switchScene(int id){
+    ofFile f(ofToDataPath(ofToString(id) + ".preset")); // 0.preset or 1.preset
+    ofBuffer b = f.readToBuffer();
+    
+    vector<string> lines = ofSplitString(b.getText(), "\n"); // Read as lines
+    
+    for(int i=0; i<lines.size(); i++){ // Iterate through lines
+        if(lines[i].length() == 0) // Check if it isn't an empty line
+            continue;
+        vector<string> arguments = ofSplitString(lines[i], ";");
+        if(arguments.size()){ // Double check after checking for empty line.
+            camDatas[i].destination.x = ofToFloat(arguments[0]);
+            camDatas[i].destination.y = ofToFloat(arguments[1]);
+            camDatas[i].zoomlevel = ofToFloat(arguments[2]);
+            
+            if(i==0){ // Execute once (for master RBP)
+                gui->getMatrix("Cam select")->setSelected(vector<int>{ofToInt(arguments[3])});
+                switchCamera(ofToInt(arguments[3]), 0);
+                camFader.trigger(40, 0); // 50 is delayTime, compensates for switch time on master-RBP.
+            }
+            
+            ofxOscMessage m; // Duplicated :/ should be in function?
+            m.setAddress("/setZoomLevel");
+            // Calculate a zoom level
+            float level = camDatas[selectedCam].zoomlevel;
+            float w, h, x, y;
+            w = 1280;
+            h = 720;
+            x = (level/20.) * w * 0.5 * 0.6;
+            y = (level/20.) * h * 0.5 * 0.6;
+            w = w - (2*x);
+            w /= 1280.;
+            h = h - (2*y);
+            h /= 720.;
+            x /= 1280.;
+            y /= 720.; // Scale 0-1
+            
+            cout << x << " " << y << " " << w << " " << h << endl;
+            m.addFloatArg(x);
+            m.addFloatArg(y);
+            m.addFloatArg(w);
+            m.addFloatArg(h);
+            camDatas[selectedCam].appSender.sendMessage(m);
+        }
+    }
+    cout << "Preset:" << endl;
+    cout << b.getText() << endl;
+    cout << "End of preset:" << endl;
+    f.close();
 }
