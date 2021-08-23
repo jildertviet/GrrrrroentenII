@@ -18,6 +18,8 @@ Turn WiFi off, since it may mess with the IP's
 :computer: Control app to run on MacBook. Select the camera's and control the movements.  
 - To save a cuePoint (for an individual camera) or scene (for all cameras): hold shift and press the button.  
 - In a scene the: (0,1) pan/tilt positions, (2) zoom and (3) active camera are saved.
+- Arrow keys for camera movement  
+- Hold shift to decrease step size for pan/tilt movement.  
 ### groentenPreview  
 :computer: Shows an overview of all the streams, run at MacBook.  
 ### groentenServer  
