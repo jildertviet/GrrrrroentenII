@@ -80,3 +80,5 @@ Bij het opstarten hoor je de motortjes kort.
 (Eventueel SSH @ camera-RBP: ww is _raspberry_)  
 
 Als ie dan weer niet te bereiken is qua IP: SD kaart kapot?  
+
+(Oja, wat ook nog een manier is om functioneren te checken: kijk op de switch of daar lampjes branden bij de betreffende RBP)
