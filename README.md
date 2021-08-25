@@ -61,12 +61,12 @@ MacBook is 192.168.0.10 (or anything besides, 2, 3, 4, 5, 6 and 11).
 Wat als de videoserver niet reageert:  
 1.) groentenGui-app herstarten  
 2.) Videoserver-RBP rebooten:  
-    Open Terminal
-    Typ: ssh pi@192.168.0.11
-    password: bloemkool (je ziet niks als typt, dat klopt)
-    Dan, als je ingelogd bent, typ:
-    sudo reboot -h now
-    Op het scherm (tv) zie je nu dingen gebeuren
+    Open Terminal  
+    Typ: ssh pi@192.168.0.11  
+    password: bloemkool (je ziet niks als je typt, dat klopt)  
+    Dan, als je ingelogd bent, typ:  
+    sudo reboot -h now  
+    Op het scherm (tv) zie je nu dingen gebeuren  
 
 Wat als een camera niet werkt?  
 Staat er stroom op? Check rode ledje op Raspberry Pi.   
