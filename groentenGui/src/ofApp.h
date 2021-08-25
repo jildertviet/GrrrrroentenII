@@ -137,7 +137,7 @@ class ofApp : public ofBaseApp, public ofxMidiListener {
         ofxMidiIn midiIn;
         ofxMidiOut midiOut;
         void initMidi();
-
+        void defaultMIDIColors(bool bScene=true);
         void keyPressed(int key);
         void keyReleased(int key);
     
@@ -167,4 +167,7 @@ class ofApp : public ofBaseApp, public ofxMidiListener {
     CamFader camFader;
 //    void setZoomLevel(int id=-1);
     int switchScene(int id);
+    void sendPlayMovie(int movieID, bool bUpdateGui = true);
+    void setCamFade(float value, bool bUpdateGui = true, bool bResetLag = false);
+    void setVideoFade(float value, bool bUpdateGui = true);
 };

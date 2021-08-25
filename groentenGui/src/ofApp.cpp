@@ -1,10 +1,12 @@
 #include "ofApp.h"
 
 void ofApp::setup(){
+    cout << "First" << endl;
     ofSetFrameRate(30);
     ofSetWindowShape(ofGetScreenWidth() / 4, ofGetScreenHeight() / 2);
     ofSetWindowTitle("Grrrrroenten II cams");
     initMidi();
+    cout << "After MIDI setup" << endl;
     vector<string> ips = {
         "192.168.0.2",
         "192.168.0.3",
@@ -14,9 +16,12 @@ void ofApp::setup(){
     };
     ip.ips = ips;
     
+    
+    cout << "CamDatas init" << endl;
     for(char i=0; i<NUM_CAMS; i++)
         camDatas[i].ip = ips[i];
     
+    cout << "Setup GUI" << endl;
     gui = new ofxDatGui( ofxDatGuiAnchor::TOP_LEFT );
     gui->setAutoDraw(false);
     
@@ -82,12 +87,15 @@ void ofApp::setup(){
     t->layout.breakHeight = 30.;
     gui->setTheme(t);
     
+    cout << "Seti window shape" << endl;
     ofSetWindowShape(gui->getWidth(), gui->getHeight() + 450);
 
+    cout << "Networking" << endl;
     receiver.setup(5004);
     displayApp.setup("192.168.0.11", 5009);
     camSelector.setup("192.168.0.11", 5007);
     
+    cout << "read cue points" << endl;
     readCuePoints();
 }
 
@@ -182,12 +190,7 @@ void ofApp::onMatrixEvent(ofxDatGuiMatrixEvent e){
     } else if(e.target->is("Cam select")){
         switchCamera(e.child, 0);
     } else if(e.target->is("playVideo")){
-        ofxOscMessage m;
-        m.setAddress("/playMovie");
-        m.addIntArg(e.child);
-        displayApp.sendMessage(m);
-        gui->getSlider("camFade")->setValue(0);
-        cout << "Send: " << m << endl;
+        sendPlayMovie(e.child, false);
     } else if(e.target->is("cuePoint")){
         if(bShiftPressed){
             camDatas[selectedCam].addCuePoint(camDatas[selectedCam].pos, e.child);
@@ -284,17 +287,9 @@ void ofApp::onSliderEvent(ofxDatGuiSliderEvent e){
         
         camDatas[selectedCam].zoomlevel = e.target->getValue();
     } else if(e.target->is("camFade")){
-        ofxOscMessage m;
-        m.setAddress("/setCamFade");
-        m.addIntArg(e.target->getValue());
-        displayApp.sendMessage(m);
-//        camDatas[selectedCam].fadeLevel = e.target->getValue();
+        setCamFade(e.target->getValue(), false); // Don't update gui (endless loop?)
     } else if(e.target->is("videoFade")){
-        ofxOscMessage m;
-        m.setAddress("/setFade");
-        m.addIntArg(e.target->getValue());
-        displayApp.sendMessage(m);
-        //        camDatas[selectedCam].fadeLevel = e.target->getValue();
+        setVideoFade(e.target->getValue(), false);
     }
 }
 
@@ -525,17 +520,54 @@ void ofApp::initMidi(){
     midiOut.openPort("APC MINI");
     //midiOut.openPort("IAC Driver Pure Data In"); // by name
     //midiOut.openVirtualPort("ofxMidiOut"); // open a virtual port
+    defaultMIDIColors();
+    defaultMIDIColors(false);
 }
 
 void ofApp::newMidiMessage(ofxMidiMessage& msg) {
-    for(int i=0; i<64; i++){
-        midiOut.sendNoteOn(msg.channel, i,  0);
+    if(msg.status == MidiStatus::MIDI_NOTE_ON){
+        if(msg.pitch>=7 && msg.pitch <= (32)){
+            defaultMIDIColors(true);
+            int sceneID = msg.pitch - 8;
+            switchScene(sceneID);
+            gui->getMatrix("Scenes")->setSelected(vector<int>{sceneID});
+        } else if(msg.pitch >= (8*6)){
+            int movieID = msg.pitch - 8*6;
+//            cout << "Play movie : " << movieID << endl;
+            sendPlayMovie(movieID, true);
+            defaultMIDIColors(false);
+        }
+        midiOut.sendNoteOn(msg.channel, msg.pitch,  1); // Set the selected note to green
+    } else if(msg.status == MidiStatus::MIDI_CONTROL_CHANGE){
+        cout << msg.control << " " << msg.value << endl;
+        if(msg.control == 56){
+            // Set cam brightness
+            setCamFade(msg.value*2, true, true);
+        } else if(msg.control == 55){
+            // Set video brightness
+            setVideoFade(msg.value*2);
+        }
     }
-    midiOut.sendNoteOn(msg.channel, msg.pitch,  1);
-    if(msg.pitch>=7){
-        int sceneID = msg.pitch - 8;
-        switchScene(sceneID);
-        gui->getMatrix("Scenes")->setSelected(vector<int>{sceneID});
+}
+
+void ofApp::defaultMIDIColors(bool bScene){
+//    for(int i=0; i<8; i++){
+//        midiOut.sendNoteOn(1, i,  0); // Off.
+//    }
+    if(bScene){
+        for(int i=8; i<(8*4); i++){
+            midiOut.sendNoteOn(1, i, 5); // Orange.
+            ofSleepMillis(1);
+        }
+    } else{
+        for(int i=8*6; i<(8*8); i++){
+            if(i == 63){
+                midiOut.sendNoteOn(1, i,  3); // Orange.
+            } else{
+                midiOut.sendNoteOn(1, i,  5); // Orange.
+            }
+            ofSleepMillis(5);
+        }
     }
 }
 
@@ -557,6 +589,7 @@ int ofApp::switchScene(int id){
             if(i==0){ // Execute once (for master RBP)
                 gui->getMatrix("Cam select")->setSelected(vector<int>{ofToInt(arguments[3])});
                 switchCamera(ofToInt(arguments[3]), 0);
+                selectCam(ofToInt(arguments[3])); // Selects the preview cam
                 camFader.trigger(40, 0); // 50 is delayTime, compensates for switch time on master-RBP.
             }
             
@@ -588,4 +621,39 @@ int ofApp::switchScene(int id){
     cout << b.getText() << endl;
     cout << "End of preset:" << endl;
     f.close();
+}
+
+void ofApp::setCamFade(float value, bool bUpdateGui, bool bResetLag){
+    // Should this stop the CamFader?
+    if(bResetLag)
+        camFader.bDone = true;
+    if(bUpdateGui)
+        gui->getSlider("camFade")->setValue(value);
+    ofxOscMessage m;
+    m.setAddress("/setCamFade");
+    m.addIntArg(value);
+    displayApp.sendMessage(m);
+}
+
+void ofApp::setVideoFade(float value, bool bUpdateGui){
+    if(bUpdateGui)
+        gui->getSlider("videoFade")->setValue(value);
+    ofxOscMessage m;
+    m.setAddress("/setFade");
+    m.addIntArg(value);
+    displayApp.sendMessage(m);
+}
+
+void ofApp::sendPlayMovie(int movieID, bool bUpdateGui){
+    ofxOscMessage m;
+    m.setAddress("/playMovie");
+    m.addIntArg(movieID);
+    displayApp.sendMessage(m);
+    gui->getSlider("camFade")->setValue(0);
+    cout << "Send: " << m << endl;
+    if(bUpdateGui){
+        gui->getMatrix("playVideo")->setSelected(vector<int>{movieID});
+        gui->update();
+    }
+    
 }

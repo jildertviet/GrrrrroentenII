@@ -1,5 +1,5 @@
 Inloop
-	GIF (stop @ cue Lisa)
+Video: GIF (stop @ cue Lisa) (1)
 
 Scene 1
 	Schilderen huiskamer
@@ -13,38 +13,38 @@ Scene 4
 Scene 5
 	Bankoverval
 Scene 6
-	Casino (filmpje?)
+	Casino
 
 Scene 7
 	Politieachtervolging (top)
 Scene 8
 	Reportage
-Scene 9
-	Poster
 
-Scene 10
+Video: poster (2)
+
+Scene 9
 	Knikkerbaan
-Scene 11
+Scene 10
 	Bootje (volgen)
-Scene 12
+Scene 11
 	Bruiloft
-Scene 13
+Scene 12
 	Wip-wap auto
-Scene 14
+Scene 13
 	Brandweer
 
-Scene 15
+Scene 14
 	Waslijn (volgen)
-Scene 16
+Scene 15
 	Band
 
-Scene 17
+Scene 16
 	Heli (geen beeld?)
-Scene 18
+Scene 17
 	Boonhakselaar
 
-Scene 19
+Scene 18
 	Frietjes maken
 
-Scene 20
-	Video’s
+Outro
+	Video’s (3 -> )
