@@ -62,11 +62,11 @@ Wat als de videoserver niet reageert:
 1.) groentenGui-app herstarten  
 2.) Videoserver-RBP rebooten:  
     Open Terminal  
-    Typ: ssh pi@192.168.0.11  
-    password: bloemkool (je ziet niks als je typt, dat klopt)  
+    Typ: ```ssh pi@192.168.0.11```  
+    password: _bloemkool_ (je ziet niks als je typt, dat klopt)  
     Dan, als je ingelogd bent, typ:  
-    sudo reboot -h now  
-    Op het scherm (tv) zie je nu dingen gebeuren  
+    ```sudo reboot -h now```    
+    Op het scherm (tv) zie je nu dingen gebeuren    
 
 Wat als een camera niet werkt?  
 Staat er stroom op? Check rode ledje op Raspberry Pi.   
