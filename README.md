@@ -76,7 +76,7 @@ Is ie te pingen: (Terminal -> ping 192.168.0.2. Als je iets een tijd in ms krijg
     etc  
 Als ie niet te bereiken is:   
 Hard-reset: stroom er af en in. Via micro-USB aan zijkant, of stekker volgen en in stopcontact in/uit.  
-Bij het opstarten hoor je de motortjes kort.
+Bij het opstarten hoor je de motortjes kort.  
 (Eventueel SSH @ camera-RBP: ww is _raspberry_)  
 
 Als ie dan weer niet te bereiken is qua IP: SD kaart kapot?  
