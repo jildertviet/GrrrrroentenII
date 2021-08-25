@@ -55,3 +55,27 @@ Server is @ 192.168.0.11
 Camera's are in range [2-6]  
 Netmask: 255.255.255.0  
 MacBook is 192.168.0.10 (or anything besides, 2, 3, 4, 5, 6 and 11).  
+
+## PROBLEMEN
+
+Wat als de videoserver niet reageert:  
+1.) groentenGui-app herstarten  
+2.) Videoserver-RBP rebooten:  
+    Open Terminal
+    Typ: ssh pi@192.168.0.11
+    password: bloemkool (je ziet niks als typt, dat klopt)
+    Dan, als je ingelogd bent, typ:
+    sudo reboot -h now
+    Op het scherm (tv) zie je nu dingen gebeuren
+
+Wat als een camera niet werkt?  
+Staat er stroom op? Check rode ledje op Raspberry Pi.   
+Is ie te pingen: (Terminal -> ping 192.168.0.2. Als je iets een tijd in ms krijgt: is ie te pingen en staat dus aan).  
+    192.168.0.2 is Raspberry met sticker 1,  
+    192.168.0.3 is Raspberry met sticker 2,  
+    etc  
+Als ie niet te bereiken is:   
+Hard-reset: stroom er af en in. Via micro-USB aan zijkant, of stekker volgen en in stopcontact in/uit.  
+Bij het opstarten hoor je de motortjes kort.  
+
+Als ie dan weer niet te bereiken is qua IP: SD kaart kapot?  
