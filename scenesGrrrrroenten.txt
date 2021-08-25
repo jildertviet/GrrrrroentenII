@@ -4,12 +4,11 @@ Video: GIF (stop @ cue Lisa) (1)
 Scene 1
 	Schilderen huiskamer
 Scene 2
-	Grrrrroenten II spitskool
+	"Grrrrroenten II" spitskool
 Scene 3
 	Huiskamer ontvoering
 Scene 4
 	Autobahn (top)
-		Optioneel: volgen
 Scene 5
 	Bankoverval
 Scene 6
@@ -34,12 +33,12 @@ Scene 13
 	Brandweer
 
 Scene 14
-	Waslijn (volgen)
+	Waslijn
 Scene 15
 	Band
 
 Scene 16
-	Heli (geen beeld?)
+	Heli (geen beeld? Cam fade slider down)
 Scene 17
 	Boonhakselaar
 
