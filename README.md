@@ -5,7 +5,7 @@ ofxDatGui is customized and not included, so OSX projects won't build.
 groentenGui also builds on of_v0.11.0
 Turn WiFi off, since it may mess with the IP's  
 
-![GrrrrroentenGui](https://github.com/jildertviet/GrrrrroentenII/blob/main/groentenGui/bin/data/grrrrroentenGui.png)
+<img src="images/groentenGui/bin/data/grrrrroentenGui.png" width="200"></img>
 
 ## Apps  
 ### groentenApp  
